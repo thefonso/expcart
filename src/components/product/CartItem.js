@@ -6,8 +6,9 @@ class CartItem extends Component {
     super(props);
     this.state = {
       quantity: 1,
+      isEdit: false,
     };
-
+    this.onEdit = this.onEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
   componentDidMount() {
@@ -15,8 +16,18 @@ class CartItem extends Component {
     this.setState({quantity})
   }
 
-  handleChange = (event) => this.setState({[event.target.name]: event.target.value});
+  // handleChange = (event) => this.setState({[event.target.name]: event.target.value});
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value,
+    });
+  };
 
+  onEdit(){
+    this.setState({
+        isEdit: true
+    });
+  }
 
   render() {
     const { product } = this.props;
@@ -28,18 +39,29 @@ class CartItem extends Component {
             <h5 className="cart-text"><small>price: </small>${product.price}</h5>
             {/*TODO: conditional render goes here */}
             <span className="cart-text text-success"><small>Quantity: </small>{product.qty}</span>
-            <input type="number"
-                   name="quantity"
-                   value={this.state.quantity}
-                   onChange={this.handleChange}
-                   className="float-right"
-                   style={{ width: "60px", marginRight: "10px", borderRadius: "3px"}}
-            />
-            <button className="btn btn-sm btn-warning float-right" onClick={this.props.updateCart(product.id,this.state.quantity)}>edit qty</button>
+          {
+              this.state.isEdit?(
+                <span>
+                  <input type="number"
+                     name="quantity"
+                     value={this.state.quantity}
+                     onChange={this.handleChange}
+                     className="float-right"
+                     style={{ width: "60px", marginRight: "10px", borderRadius: "3px"}}/>
+                  <button className="btn btn-sm btn-warning float-right"onClick={this.props.updateCart(product.id,this.state.quantity)}>save</button>
+                </span>
+            ) : (
+                <span>
+                <button className="btn btn-sm btn-warning float-right" onClick={this.onEdit}>edit qty</button>
+                <button id={"remove-from-cart"}
+                      className=" btn btn-sm btn-warning float-right"
+                      onClick={() => this.props.remove(product)}>Remove from cart</button>
+                </span>
+            )
+          }
 
-            <button id={"remove-from-cart"}
-                    className=" btn btn-sm btn-warning float-right"
-                    onClick={() => this.props.remove(product)}>Remove from cart</button>
+
+
 
           </div>
           </form>
