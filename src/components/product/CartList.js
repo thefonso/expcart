@@ -5,6 +5,7 @@ import axios from 'axios';
 
 const API_URL = 'http://localhost:4000';
 
+// we need the SPECIFIC products in the cart returned as new product array data
 function getCartProducts(cart) {
 	return axios.post(`${API_URL}/api/products`, {cart})
 		.then(response => response.data);
@@ -41,7 +42,6 @@ class CartList extends Component {
   componentWillMount() {
     let cart = localStorage.getItem('cart');
     if(!cart) return; //no items in cart? then return now.
-
     //setState for total and new products array
       this.calculate(cart);
   }
@@ -59,10 +59,9 @@ class CartList extends Component {
     console.log("updateCart: "+ productId +" "+ productQty);
     //make parent re-render
     this.setState({ state: this.state });
+    // not sure about this way....but it works.
     this.componentWillMount();
   };
-
-
 
   removeFromCart = (product) => {
       let products = this.state.products.filter((item) => item.id !== product.id);

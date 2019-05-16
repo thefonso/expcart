@@ -1,6 +1,5 @@
 import React from "react"
 import "../../assets/css/components/product/product-list.css"
-// import ProductItem from './product'
 import { StaticQuery, graphql } from "gatsby"
 import ProductItem from "./ProductItem";
 
