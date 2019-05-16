@@ -1,7 +1,18 @@
 .product {
+  display: flex;
+  justify-content: space-between;
   border-bottom: 1px solid lightgray;
 }
-.product-add-to-cart button {
+.product > div {
+  align-self: center;
+}
+.product-image{
+  margin-top: 2vh;
+}
+.product-title{
+  width: 20vw;
+}
+button {
   background-color: #0053a0;
   color: #ffffff;
   text-align: center;
