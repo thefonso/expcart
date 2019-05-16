@@ -1,0 +1,25 @@
+.cart{
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid lightgray;
+}
+.cart > div{
+  align-self: center;
+}
+.cart-title{
+
+}
+.cart-text{
+
+}
+button {
+  /*background-color: #0053a0;*/
+  color: #ffffff;
+  text-align: center;
+  text-transform: uppercase;
+  padding: .8rem .5rem;
+  font-size: .8rem;
+  border-radius: .5rem;
+  cursor: pointer;
+  font-weight: 700;
+}
