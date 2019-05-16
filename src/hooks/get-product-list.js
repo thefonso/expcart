@@ -8,6 +8,7 @@ const { allDataJson } = useStaticQuery(
           edges {
             node {
               products {
+                id
                 sku
                 title
                 price

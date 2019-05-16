@@ -19,17 +19,13 @@ class CartList extends Component {
       tax: 0,
       shipping:0,
       totalCost:0,
-      quantity: 1,
+      quantity: 0,
       totalQuantity: 0,
     };
     this.updateCart = this.updateCart.bind(this);
   }
 
-  componentWillMount() {
-    let cart = localStorage.getItem('cart');
-    if(!cart) return; //no items in cart? then return now.
-
-    //setState for total and new products array
+  calculate = (cart) => {
     getCartProducts(cart).then((products) => {
       let subtotal = 0;
       let totalQuantity = 0;
@@ -40,13 +36,18 @@ class CartList extends Component {
       }
       this.setState({ products, subtotal, totalQuantity });
     });
-    // cart investigation
-    const entries = Object.entries(cart);
-    console.log(entries);
+  };
 
+  componentWillMount() {
+    let cart = localStorage.getItem('cart');
+    if(!cart) return; //no items in cart? then return now.
+
+    //setState for total and new products array
+      this.calculate(cart);
   }
 
-  updateCart = (productId, productQty) => {
+  updateCart = (event, productId, productQty) => {
+    event.preventDefault();
     let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
     // let id = product.id.toString();
     let id = Number(productId);
@@ -56,7 +57,12 @@ class CartList extends Component {
     console.log(cart);
     localStorage.setItem('cart', JSON.stringify(cart));
     console.log("updateCart: "+ productId +" "+ productQty);
+    //make parent re-render
+    this.setState({ state: this.state });
+    this.componentWillMount();
   };
+
+
 
   removeFromCart = (product) => {
       let products = this.state.products.filter((item) => item.id !== product.id);
@@ -79,6 +85,7 @@ class CartList extends Component {
     let totalCost = tax + shipping + subtotal;
 
     return (
+        <form>
         <div className="container">
             <hr/>
             {
@@ -96,6 +103,7 @@ class CartList extends Component {
             <button className="btn btn-danger" onClick={this.clearCart} style={{ marginRight: "10px" }}>Clear Cart</button>
             <br/><br/><br/>
         </div>
+        </form>
     );
   }
 }

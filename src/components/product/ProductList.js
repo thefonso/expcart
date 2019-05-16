@@ -7,10 +7,6 @@ import ProductItem from "./ProductItem";
 
 class ProductList extends React.Component{
 
-  constructor(props){
-    super(props);
-  }
-
   render(){
     return(
         <div className="product-list grid-x grid-margin-y">
