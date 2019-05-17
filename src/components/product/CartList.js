@@ -1,15 +1,7 @@
 import React, {Component} from 'react';
-import {Link} from 'gatsby';
+import {graphql, Link, StaticQuery} from 'gatsby';
 import CartItem from './CartItem';
-import axios from 'axios';
 
-const API_URL = 'http://localhost:4000';
-
-// we need the SPECIFIC products in the cart returned as new product array data
-function getCartProducts(cart) {
-	return axios.post(`${API_URL}/api/products`, {cart})
-		.then(response => response.data);
-}
 
 class CartList extends Component {
   constructor(props) {
@@ -26,24 +18,51 @@ class CartList extends Component {
     this.updateCart = this.updateCart.bind(this);
   }
 
-  calculate = (cart) => {
-    getCartProducts(cart).then((products) => {
-      let subtotal = 0;
-      let totalQuantity = 0;
-      // TODO: replace for loop with .map
-      for (var i = 0; i < products.length; i++) {
-          subtotal += products[i].price * products[i].qty;
-          totalQuantity += products[i].qty;
+  getCartProducts(cart) {
+    let products = [];
+    let id = null;
+    let cartProducts = JSON.parse(cart);
+    let allProducts = this.props.products.allDataJson.edges[0].node.products;
+    console.log("in getCartProducts:");
+    console.log("cartProducts " + cartProducts);
+    console.log("allProducts ");
+    console.log(this.props.products.allDataJson.edges[0].node.products);
+    console.log("prod length " + allProducts.length);
+
+    if (!cart) return JSON.Parse(products);
+    for (let i = 0; i < allProducts.length; i++) {
+      id = allProducts[i].id.toString();
+      console.log("id " + id);
+      console.log(cartProducts);
+      if (cartProducts.hasOwnProperty(id)) {
+        allProducts[i].qty = cartProducts[id];
+        products.push(allProducts[i]);
       }
-      this.setState({ products, subtotal, totalQuantity });
-    });
+    }
+    console.log(products);
+    this.calculate(products);
+
+  }
+
+  calculate = (prods) => {
+    let products = prods;
+    console.log("in calculate");
+
+    let subtotal = 0;
+    let totalQuantity = 0;
+    for (let i = 0; i < products.length; i++) {
+        subtotal += products[i].price * products[i].qty;
+        totalQuantity += products[i].qty;
+    }
+    this.setState({ products, subtotal, totalQuantity });
+
   };
 
   componentWillMount() {
     let cart = localStorage.getItem('cart');
     if(!cart) return; //no items in cart? then return now.
     //setState for total and new products array
-      this.calculate(cart);
+      this.getCartProducts(cart);
   }
 
   updateCart = (event, productId, productQty) => {
@@ -59,7 +78,7 @@ class CartList extends Component {
     console.log("updateCart: "+ productId +" "+ productQty);
     //make parent re-render
     this.setState({ state: this.state });
-    // not sure about this way....but it works.
+    // TODO not sure about this way....but it works.
     this.componentWillMount();
   };
 
@@ -92,11 +111,16 @@ class CartList extends Component {
             }
             <hr/>
 
-            { products.length ? <div ><h4><small>SubTotal:</small><span className="float-right text-primary">${subtotal}</span></h4><hr/></div>: ''}
-            { products.length ? <div><h4><small>Tax:</small><span className="float-right text-primary">${tax}</span></h4><hr/></div>: ''}
-            { products.length ? <div><h4><small>Shipping:</small><span className="float-right text-primary">${shipping}</span></h4><hr/></div>: ''}
-            { products.length ? <div><h4><small>Total Cost:</small><span className="float-right text-primary">${totalCost}</span></h4><hr/></div>: ''}
-            { !products.length ? <h3 className="text-warning">No item in the cart</h3>: ''}
+            { products.length ?(
+                <>
+                  <div ><h4><small>SubTotal:</small><span className="float-right text-primary">${subtotal}</span></h4><hr/></div>
+                  <div><h4><small>Tax:</small><span className="float-right text-primary">${tax}</span></h4><hr/></div>
+                  <div><h4><small>Shipping:</small><span className="float-right text-primary">${shipping}</span></h4><hr/></div>
+                  <div><h4><small>Total Cost:</small><span className="float-right text-primary">${totalCost}</span></h4><hr/></div>
+                </>
+            ):(
+                <h3 className="text-warning">No item in the cart</h3>
+            )}
 
             <Link to="/checkout"><button className="btn btn-success">Checkout</button></Link>
             <button className="btn btn-danger" onClick={this.clearCart} style={{ marginRight: "10px" }}>Clear Cart</button>
@@ -107,7 +131,30 @@ class CartList extends Component {
   }
 }
 
-export default CartList;
+export default () => (
+    <StaticQuery
+    query={graphql`
+      query {
+        allDataJson {
+          edges {
+            node {
+              products {
+                id
+                sku
+                title
+                price
+                image
+              }
+            }
+          }
+        }
+      }
+    `}
+    render={(data) => (
+      <CartList products={data} />
+    )}
+  />
+)
 
 
 

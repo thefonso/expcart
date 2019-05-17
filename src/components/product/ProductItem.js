@@ -21,8 +21,6 @@ export default class ProductItem extends React.Component{
 	}
 
 
-
-
 	render(){
 		const { product } = this.props;
 		return (
