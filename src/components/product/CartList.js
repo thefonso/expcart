@@ -38,7 +38,6 @@ class CartList extends Component {
   calculate = (prods) => {
     let products = prods;
     // console.log("in calculate");
-
     let subtotal = 0;
     let totalQuantity = 0;
     for (let i = 0; i < products.length; i++) {
@@ -70,19 +69,24 @@ class CartList extends Component {
     this.componentWillMount();
   };
 
-  removeFromCart = (product) => {
+  // let allProducts = this.props.products.allDataJson.edges[0].node.products;
+
+  removeFromCart = (event, product) => {
+      event.preventDefault();
       let products = this.state.products.filter((item) => item.id !== product.id);
       let cart = JSON.parse(localStorage.getItem('cart'));
       delete cart[product.id.toString()];
       localStorage.setItem('cart', JSON.stringify(cart));
       let subtotal = this.state.subtotal - (product.qty * product.price)
       this.setState({products, subtotal});
-  }
+      console.log("remove called")
+  };
 
-  clearCart = () => {
+  clearCart = (event) => {
+      event.preventDefault();
       localStorage.removeItem('cart');
       this.setState({products: []});
-  }
+  };
 
   render() {
     const { products, subtotal, totalQuantity } =  this.state;
@@ -113,7 +117,7 @@ class CartList extends Component {
             )}
 
             <Link to="/checkout"><button className="btn btn-success">Checkout</button></Link>
-            <button className="btn btn-danger" onClick={this.clearCart} style={{ marginRight: "10px" }}>Clear Cart</button>
+            <button className="btn btn-danger" onClick={(e) => {this.clearCart(e)}} style={{ marginRight: "10px" }}>Clear Cart</button>
             <br/><br/><br/>
         </div>
         </form>

@@ -5,7 +5,6 @@ class CartItem extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      // quantity: 1,
       isEdit: false,
     };
     this.onEdit = this.onEdit.bind(this);
@@ -46,7 +45,7 @@ class CartItem extends Component {
                   <button className="btn btn-sm btn-warning float-right" onClick={this.onEdit}>edit qty</button>
                   <button id={"remove-from-cart"}
                       className=" btn btn-sm btn-warning float-right"
-                      onClick={() => this.props.remove(product)}>Remove from cart</button>
+                      onClick={(e) => {this.props.remove(e, product)}}>Remove from cart</button>
                 </span>
             )
           }
