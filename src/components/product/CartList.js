@@ -23,30 +23,21 @@ class CartList extends Component {
     let id = null;
     let cartProducts = JSON.parse(cart);
     let allProducts = this.props.products.allDataJson.edges[0].node.products;
-    console.log("in getCartProducts:");
-    console.log("cartProducts " + cartProducts);
-    console.log("allProducts ");
-    console.log(this.props.products.allDataJson.edges[0].node.products);
-    console.log("prod length " + allProducts.length);
 
     if (!cart) return JSON.Parse(products);
     for (let i = 0; i < allProducts.length; i++) {
       id = allProducts[i].id.toString();
-      console.log("id " + id);
-      console.log(cartProducts);
       if (cartProducts.hasOwnProperty(id)) {
         allProducts[i].qty = cartProducts[id];
         products.push(allProducts[i]);
       }
     }
-    console.log(products);
     this.calculate(products);
-
   }
 
   calculate = (prods) => {
     let products = prods;
-    console.log("in calculate");
+    // console.log("in calculate");
 
     let subtotal = 0;
     let totalQuantity = 0;
@@ -68,16 +59,13 @@ class CartList extends Component {
   updateCart = (event, productId, productQty) => {
     event.preventDefault();
     let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
-    // let id = product.id.toString();
     let id = Number(productId);
-    // let newQty = Number(this.state.quantity);
     let newQty = Number(productQty);
     cart[id] = newQty;
-    console.log(cart);
+
     localStorage.setItem('cart', JSON.stringify(cart));
-    console.log("updateCart: "+ productId +" "+ productQty);
     //make parent re-render
-    this.setState({ state: this.state });
+    // this.setState({ state: this.state });
     // TODO not sure about this way....but it works.
     this.componentWillMount();
   };
@@ -107,7 +95,9 @@ class CartList extends Component {
         <div className="container">
             <hr/>
             {
-                products.map((product, index, quantity) => <CartItem product={product} quantity={quantity} remove={this.removeFromCart} updateCart={this.updateCart} key={index}/>)
+              products.map((product, index, quantity) => <CartItem
+                product={product} quantity={quantity}
+                remove={this.removeFromCart} updateCart={this.updateCart} key={index}/>)
             }
             <hr/>
 

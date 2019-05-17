@@ -10,12 +10,12 @@ export default class ProductItem extends React.Component{
 	}
 
 	addToCart = () => {
-		console.log(this.props.product.id.toString());
+		// console.log(this.props.product.id.toString());
 		let cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : {};
 		let id = this.props.product.id.toString();
 		cart[id] = (cart[id] ? cart[id] : 0);
 		let qty = cart[id] + parseInt(this.state.quantity);
-		console.log(qty);
+		// console.log(qty);
 		cart[id] = qty;
 		localStorage.setItem('cart', JSON.stringify(cart));
 	}
