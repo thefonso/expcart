@@ -37,7 +37,6 @@ class CartList extends Component {
 
   calculate = (prods) => {
     let products = prods;
-    // console.log("in calculate");
     let subtotal = 0;
     let totalQuantity = 0;
     for (let i = 0; i < products.length; i++) {
@@ -51,8 +50,7 @@ class CartList extends Component {
   componentWillMount() {
     let cart = localStorage.getItem('cart');
     if(!cart) return; //no items in cart? then return now.
-    //setState for total and new products array
-      this.getCartProducts(cart);
+    this.getCartProducts(cart);
   }
 
   updateCart = (event, productId, productQty) => {
@@ -63,13 +61,9 @@ class CartList extends Component {
     cart[id] = newQty;
 
     localStorage.setItem('cart', JSON.stringify(cart));
-    //make parent re-render
-    // this.setState({ state: this.state });
-    // TODO not sure about this way....but it works.
-    this.componentWillMount();
+    this.setState({ state: this.state });
   };
 
-  // let allProducts = this.props.products.allDataJson.edges[0].node.products;
 
   removeFromCart = (event, product) => {
       event.preventDefault();
@@ -90,9 +84,10 @@ class CartList extends Component {
 
   render() {
     const { products, subtotal, totalQuantity } =  this.state;
-    let tax = subtotal * 0.10;
-    let shipping = (50 + 0.02 ) - (5 * totalQuantity) ;
-    let totalCost = tax + shipping + subtotal;
+
+    let tax = (subtotal * 0.10).toFixed(2);
+    let shipping = ((50 + 0.02 ) - (5 * totalQuantity)).toFixed(2) ;
+    let totalCost = parseFloat(tax + shipping + subtotal).toFixed(2);
 
     return (
         <form>
@@ -107,7 +102,7 @@ class CartList extends Component {
 
             { products.length ?(
                 <>
-                  <div ><h4><small>SubTotal:</small><span className="float-right text-primary">${subtotal}</span></h4><hr/></div>
+                  <div ><h4><small>SubTotal:</small><span className="float-right text-primary">${parseFloat(subtotal).toFixed(2)}</span></h4><hr/></div>
                   <div><h4><small>Tax:</small><span className="float-right text-primary">${tax}</span></h4><hr/></div>
                   <div><h4><small>Shipping:</small><span className="float-right text-primary">${shipping}</span></h4><hr/></div>
                   <div><h4><small>Total Cost:</small><span className="float-right text-primary">${totalCost}</span></h4><hr/></div>
