@@ -4,6 +4,7 @@
 ---
 - run `npm ci`
 - run `gatsby develop`
+- run `npm test`
 - http://localhost:8000
 
 
