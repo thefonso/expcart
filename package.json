@@ -5,6 +5,7 @@
   "version": "0.1.0",
   "author": "Jon Molinaro <jmolinaro@roomstogo.com>",
   "dependencies": {
+    "@react-mock/localstorage": "^0.1.2",
     "axios": "^0.18.0",
     "body-parser": "^1.19.0",
     "bootstrap": "^4.3.1",
@@ -14,6 +15,7 @@
     "gatsby-plugin-react-helmet": "^3.0.12",
     "gatsby-source-filesystem": "^2.0.33",
     "gatsby-transformer-json": "^2.1.11",
+    "jest-createspyobj": "^1.2.2",
     "jsonwebtoken": "^8.5.1",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
@@ -23,7 +25,16 @@
     "react-router-dom": "^5.0.0"
   },
   "devDependencies": {
-    "prettier": "^1.17.0"
+    "babel-jest": "^24.8.0",
+    "babel-preset-gatsby": "^0.1.11",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.13.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.8.0",
+    "jest-dom": "^3.2.2",
+    "prettier": "^1.17.0",
+    "react-test-renderer": "^16.8.6",
+    "react-testing-library": "^7.0.1"
   },
   "keywords": [
     "gatsby"
@@ -35,6 +46,6 @@
     "format": "prettier --write src/**/*.{js,jsx}",
     "start": "npm run develop",
     "serve": "gatsby serve",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\""
+    "test": "jest"
   }
 }

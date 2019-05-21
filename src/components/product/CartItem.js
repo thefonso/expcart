@@ -35,14 +35,21 @@ class CartItem extends Component {
               this.state.isEdit?(
               <>
                   <span className="cart-text text-success"><small>Quantity: </small></span>
-                  <input type="number" name="quantity" value={this.state.quantity} onChange={this.handleChange} className="float-right" style={{ width: "60px", marginRight: "10px", borderRadius: "3px"}} />
+                  <input type="number" name="quantity"
+                         value={this.state.quantity}
+                         onChange={this.handleChange}
+                         className="float-right"
+                         style={{ width: "60px", marginRight: "10px", borderRadius: "3px"}} />
                   <button className="btn btn-sm btn-warning float-right"
                           onClick={(e) => { this.setState({isEdit: false}); this.props.updateCart(e, product.id,this.state.quantity)}}>save</button>
               </>
             ) : (
                 <span>
-                  <span className="cart-text text-success"><small>Quantity: </small>{this.state.quantity}</span>
-                  <button className="btn btn-sm btn-warning float-right" onClick={this.onEdit}>edit qty</button>
+                  <span className="cart-text text-success">
+                    <small>Quantity: </small>
+                    {this.state.quantity}</span>
+                  <button className="btn btn-sm btn-warning float-right"
+                          onClick={this.onEdit}>edit qty</button>
                   <button id={"remove-from-cart"}
                       className=" btn btn-sm btn-warning float-right"
                       onClick={(e) => {this.props.remove(e, product)}}>Remove from cart</button>
